@@ -1,0 +1,54 @@
+import Foundation
+
+struct Point {
+    let x: Double
+    let y: Double
+    
+    func distance(from point: Point) -> Double {
+        return sqrt(pow((abs(point.x) - abs(self.x)),2)+pow((abs(point.y) - abs(self.y)),2)).roundTo(places: 2)
+    }
+}
+
+struct Triangle {
+    enum Kind {
+        case equilateral
+        case isosceles
+        case scalene
+    }
+    
+    let vertext1: Point
+    let vertext2: Point
+    let vertext3: Point
+    
+    var kind: Kind {
+        let ab = vertext1.distance(from: vertext2)
+        let ac = vertext1.distance(from: vertext3)
+        let bc = vertext2.distance(from: vertext3)
+        
+        if ab == ac && ac == bc  {
+            return .equilateral
+        } else {
+            if ab != ac && ac != bc && ab != bc {
+                return .scalene
+            } else {
+                return .isosceles
+            }
+        }
+    }
+}
+
+extension Double {
+    func roundTo(places: Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return(self * divisor).rounded() / divisor
+    }
+    
+}
+
+//A(2,7), B(2,3), C(5,3)
+//A(2,3), B(2,1), C(4,1)
+//A(5,7), B(10,9), C(5.768,12.33)
+
+print(Triangle(vertext1: Point.init(x: 2, y: 7), vertext2: Point.init(x: 2, y: 3), vertext3: Point.init(x: 5, y: 3)).kind)
+print(Triangle(vertext1: Point.init(x: 2, y: 3), vertext2: Point.init(x: 2, y: 1), vertext3: Point.init(x: 4, y: 1)).kind)
+print(Triangle(vertext1: Point.init(x: 5, y: 7), vertext2: Point.init(x: 10, y: 9), vertext3: Point.init(x: 5.768, y: 12.33)).kind)
